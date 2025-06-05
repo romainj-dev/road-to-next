@@ -1,92 +1,40 @@
 import clsx from 'clsx';
+import { LucideCircleCheck, LucideFileText, LucidePencil } from 'lucide-react';
 import Link from 'next/link';
+import { Heading } from '@/components/heading';
+import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { initialTickets } from '@/data';
 import { ticketPath } from '@/paths';
 
-const DocumentIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    fill='none'
-    viewBox='0 0 24 24'
-    strokeWidth={1.5}
-    stroke='currentColor'
-    className='size-6'
-  >
-    <path
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      d='M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z'
-    />
-  </svg>
-);
-
-const PencilIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    fill='none'
-    viewBox='0 0 24 24'
-    strokeWidth={1.5}
-    stroke='currentColor'
-    className='size-6'
-  >
-    <path
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      d='m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125'
-    />
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    fill='none'
-    viewBox='0 0 24 24'
-    strokeWidth={1.5}
-    stroke='currentColor'
-    className='size-6'
-  >
-    <path
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      d='m4.5 12.75 6 6 9-13.5'
-    />
-  </svg>
-);
 const TICKET_ICONS = {
-  OPEN: <DocumentIcon />,
-  IN_PROGRESS: <PencilIcon />,
-  DONE: <CheckIcon />,
+  OPEN: <LucideFileText />,
+  IN_PROGRESS: <LucidePencil />,
+  DONE: <LucideCircleCheck />,
 };
 
 const TicketsPage = () => {
   return (
     <div className='flex flex-1 flex-col gap-y-8'>
-      <div>
-        <h2 className='text-3xl font-bold tracking-tight'>TicketsPage</h2>
-        <p className='text-muted-foreground text-sm'>All the tickets</p>
-      </div>
+      <Heading title='Tickets' description='All the tickets' />
+
       <div className='animate-fade-from-top flex flex-1 flex-col items-center gap-y-4'>
         {initialTickets.map((ticket) => (
-          <div
-            key={ticket.id}
-            className='w-full max-w-[420px] rounded border border-slate-100 p-4'
-          >
-            <div>{TICKET_ICONS[ticket.status]}</div>
-            <h2
-              className={clsx('truncate text-lg font-semibold', {
-                'text-green-500': ticket.status === 'DONE',
-                'text-yellow-500': ticket.status === 'IN_PROGRESS',
-                'text-red-500': ticket.status === 'OPEN',
-              })}
-            >
-              {ticket.title}
-            </h2>
-            <p className='truncate text-sm text-slate-500'>{ticket.content}</p>
-            <Link href={ticketPath(ticket.id)} className='text-sm underline'>
-              View
-            </Link>
-          </div>
+          <Card key={ticket.id} className='w-full max-w-[420px] p-4'>
+            <CardTitle className='flex items-center gap-x-2'>
+              <span>{TICKET_ICONS[ticket.status]}</span>
+              <span className={clsx('truncate')}>{ticket.title}</span>
+            </CardTitle>
+            <CardContent>
+              <span className='line-clamp-3 whitespace-break-spaces'>
+                {ticket.content}
+              </span>
+            </CardContent>
+            <CardFooter>
+              <Link href={ticketPath(ticket.id)} className='text-sm underline'>
+                View
+              </Link>
+            </CardFooter>
+          </Card>
         ))}
       </div>
     </div>
