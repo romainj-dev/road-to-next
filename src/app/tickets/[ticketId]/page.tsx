@@ -1,9 +1,6 @@
-import Link from 'next/link';
-import { Placeholder } from '@/components/Placeholder';
-import { Button } from '@/components/ui/button';
+import { notFound } from 'next/navigation';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
-import { ticketsPath } from '@/paths';
 
 type TicketPageProps = {
   params: Promise<{
@@ -15,17 +12,9 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId);
 
-  if (!ticket)
-    return (
-      <Placeholder
-        label='Ticket not found'
-        button={
-          <Button asChild>
-            <Link href={ticketsPath()}>Go back</Link>
-          </Button>
-        }
-      />
-    );
+  if (!ticket) {
+    notFound()
+  }
 
   return (
     <div className='animate-fade-from-top flex justify-center'>

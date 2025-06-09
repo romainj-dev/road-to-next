@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Heading } from '@/components/heading';
+import { Placeholder } from '@/components/Placeholder';
 import { Spinner } from '@/components/spinner';
 import { TicketList } from '@/features/ticket/components/ticket-list';
 
@@ -8,10 +10,11 @@ const TicketsPage = () => {
     <div className='flex flex-1 flex-col gap-y-8'>
       <Heading title='Tickets' description='All the tickets' />
 
-      <Suspense fallback={<Spinner />}>
-        {/* The TicketList component is lazy-loaded and will show a spinner while loading */}
-        <TicketList />
-      </Suspense>
+      <ErrorBoundary fallback={<Placeholder label='Something went wrong!' />}>
+        <Suspense fallback={<Spinner />}>
+          <TicketList />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };
