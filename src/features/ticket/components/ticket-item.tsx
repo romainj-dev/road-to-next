@@ -1,10 +1,14 @@
 import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
-import { LucideSquareArrowOutUpRight, LucideTrash } from 'lucide-react';
+import {
+  LucideArrowUpRightFromSquare,
+  LucidePencil,
+  LucideTrash,
+} from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
-import { ticketPath } from '@/paths';
+import { ticketEditPath, ticketPath } from '@/paths';
 import { deleteTicket } from '../actions/delete-ticket';
 import { TICKET_ICONS } from '../constants';
 import { getTicket } from '../queries/get-ticket';
@@ -21,14 +25,25 @@ type TicketItemProps = {
   isDetail?: boolean;
 };
 
-export const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
+export const TicketItem = async ({
+  ticket,
+  isDetail = false,
+}: TicketItemProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ticketPerItem = await getTicket(ticket.id);
 
   const detailButton = (
     <Button asChild variant='outline' size='icon'>
       <Link prefetch href={ticketPath(ticket.id)}>
-        <LucideSquareArrowOutUpRight className='h-4 w-4' />
+        <LucideArrowUpRightFromSquare className='h-4 w-4' />
+      </Link>
+    </Button>
+  );
+
+  const editButton = (
+    <Button variant='outline' size='icon' asChild>
+      <Link prefetch href={ticketEditPath(ticket.id)}>
+        <LucidePencil className='h-4 w-4' />
       </Link>
     </Button>
   );
@@ -64,7 +79,17 @@ export const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) 
         </CardContent>
       </Card>
       <div className='flex flex-col gap-y-1'>
-        {isDetail ? deleteButton : detailButton}
+        {isDetail ? (
+          <>
+            {editButton}
+            {deleteButton}
+          </>
+        ) : (
+          <>
+            {detailButton}
+            {editButton}
+          </>
+        )}
       </div>
     </div>
   );
