@@ -7,8 +7,9 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { ticketEditPath, ticketPath } from '@/paths';
+import { toCurrencyFromCent } from '@/utils/currency';
 import { deleteTicket } from '../actions/delete-ticket';
 import { TICKET_ICONS } from '../constants';
 import { getTicket } from '../queries/get-ticket';
@@ -77,6 +78,12 @@ export const TicketItem = async ({
             {ticket.content}
           </span>
         </CardContent>
+        <CardFooter className='flex justify-between'>
+          <p className='text-muted-foreground text-sm'>{ticket.deadline}</p>
+          <p className='text-muted-foreground text-sm'>
+            {toCurrencyFromCent(ticket.bounty)}
+          </p>
+        </CardFooter>
       </Card>
       <div className='flex flex-col gap-y-1'>
         {isDetail ? (
